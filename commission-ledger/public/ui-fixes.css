@@ -1,0 +1,43 @@
+/* Commission Ledger UX fixes */
+
+/* Keep tablet/mobile focused on the product instead of wasting half the viewport on the rail. */
+@media (max-width: 1300px){
+  .app-shell{display:block}
+  .side{position:fixed;left:-270px;top:0;z-index:40;width:248px;height:100vh;transition:left .22s ease}
+  .side.show{left:0}
+  .mobile-head{display:flex;align-items:center;justify-content:space-between;padding:15px 0}
+  .main{padding:0 18px;max-width:1200px}
+  .page-head{padding-top:24px}
+
+  /* Transaction filters stay on one clean line; horizontal overflow is only a last resort. */
+  .filterbar:has(#search){
+    display:grid;
+    grid-template-columns:minmax(155px,1.45fr) repeat(2,minmax(105px,1fr)) repeat(2,minmax(125px,1fr)) auto auto;
+    gap:9px;
+    align-items:end;
+    flex-wrap:nowrap;
+    overflow-x:auto;
+    padding-bottom:16px;
+  }
+  .filterbar:has(#search)>*{width:100%;min-width:0;margin:0}
+  .filterbar:has(#search) .search{min-width:0}
+  .filterbar:has(#search) button{white-space:nowrap}
+}
+
+@media (max-width: 700px){
+  .main{padding:0 13px}
+  .page-head{padding:18px 0 18px}
+  .filterbar:has(#search){
+    grid-template-columns:minmax(145px,1.5fr) repeat(2,minmax(100px,1fr)) repeat(2,minmax(118px,1fr)) auto auto;
+    overflow-x:auto;
+    scrollbar-width:thin;
+  }
+  .filterbar:has(#search)>*{flex:0 0 auto}
+}
+
+/* A little more premium breathing room without the huge dead zones. */
+.card{transform:translateZ(0)}
+.page-head h1{line-height:1.05}
+
+/* Native date inputs should visually read as filled controls. */
+input[type="date"]{color-scheme:light}
