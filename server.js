@@ -1,0 +1,18 @@
+const http = require('http');
+const fs = require('fs');
+const path = require('path');
+const port = process.env.PORT || 10000;
+const root = __dirname;
+const types = {'.html':'text/html; charset=utf-8','.js':'text/javascript; charset=utf-8','.css':'text/css; charset=utf-8','.md':'text/markdown; charset=utf-8'};
+const server = http.createServer((req,res)=>{
+  let pathname = decodeURIComponent((req.url||'/').split('?')[0]);
+  if(pathname === '/') pathname='/index.html';
+  const safe = path.normalize(pathname).replace(/^([.][.][\\/])+/, '');
+  const file = path.join(root,safe);
+  if(!file.startsWith(root)) { res.writeHead(403); return res.end('Forbidden'); }
+  fs.readFile(file,(err,data)=>{
+    if(err){ res.writeHead(err.code==='ENOENT'?404:500, {'Content-Type':'text/plain'}); return res.end(err.code==='ENOENT'?'Not found':'Server error'); }
+    res.writeHead(200, {'Content-Type': types[path.extname(file)] || 'application/octet-stream','Cache-Control':'no-cache'}); res.end(data);
+  });
+});
+server.listen(port, '0.0.0.0', ()=>console.log(`NovaPlay listening on ${port}`));
